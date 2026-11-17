@@ -247,7 +247,16 @@ class EdifyGenerator(object):
   def PrintQASSABanner(self, QASSA_version, android_version, build_id, build_date,
                                   security_patch, device, prev_build_id=None,
                                   prev_build_date=None, prev_security_patch=None):
-    self.Print("Yooo look at this dude, flashing Android 10 in 2026! [LAUGH]")
+    """Print the build details under the ROM banner from the device releasetools.
+
+    The signature is fixed by the three call sites in ota_from_target_files;
+    only the fields that are useful in recovery are printed.
+    """
+    self.Print("  Build: %s (%s)" % (build_id, build_date))
+    self.Print("  Security patch: %s" % (security_patch,))
+    if prev_build_id:
+      self.Print("  Updating from: %s (%s)" % (prev_build_id, prev_build_date))
+    self.Print("------------------------------------------")
 
   def TunePartition(self, partition, *options):
     fstab = self.fstab
